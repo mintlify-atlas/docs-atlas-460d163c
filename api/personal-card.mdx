@@ -1,0 +1,144 @@
+---
+title: "RafnixG class — personal card and profile API reference"
+description: "Complete reference for the RafnixG class. Methods: display(), posts(), get_links(). Renders a Rich console table with name, position, and links."
+---
+
+The `RafnixG` class is the main entry point for the rafnixg library. It holds personal profile data — name, position, social links, and bio — and exposes methods that render formatted tables in your terminal using the [Rich](https://rich.readthedocs.io/) library. You can display the personal card, browse the latest blog posts, or list profile links, all from a single object.
+
+## Constructor
+
+Instantiating `RafnixG` requires no arguments. All attributes are set automatically from hardcoded profile data.
+
+```python
+from rafnixg import RafnixG
+
+card = RafnixG()
+```
+
+### Attributes
+
+<ResponseField name="username" type="str">
+  GitHub username. Value: `"rafnixg"`.
+</ResponseField>
+
+<ResponseField name="name" type="str">
+  Full display name. Value: `"Rafnix Guzmán"`.
+</ResponseField>
+
+<ResponseField name="position" type="str">
+  Professional title. Value: `"Python Backend | AI Engineer | Odoo Developer"`.
+</ResponseField>
+
+<ResponseField name="links" type="str">
+  URL to the personal links page. Value: `"https://links.rafnixg.dev"`.
+</ResponseField>
+
+<ResponseField name="web" type="str">
+  Personal website URL. Value: `"https://rafnixg.dev"`.
+</ResponseField>
+
+<ResponseField name="blog" type="str">
+  Blog URL. Value: `"https://blog.rafnixg.dev"`.
+</ResponseField>
+
+<ResponseField name="cv" type="str">
+  Online résumé URL. Value: `"https://resume.rafnixg.dev"`.
+</ResponseField>
+
+<ResponseField name="github" type="str">
+  GitHub profile URL. Value: `"https://github.com/rafnixg"`.
+</ResponseField>
+
+<ResponseField name="twitter" type="str">
+  Twitter/X handle. Value: `"@rafnixg"`.
+</ResponseField>
+
+<ResponseField name="about" type="str">
+  Long-form bio describing professional background and specializations.
+</ResponseField>
+
+## Methods
+
+### `display()`
+
+Renders the personal card as a Rich table in the console. The table shows every instance attribute as a key–value row, with the formatted name and username as the table title.
+
+No parameters. No return value.
+
+```python
+from rafnixg import RafnixG
+
+card = RafnixG()
+card.display()
+```
+
+---
+
+### `posts()`
+
+Fetches the latest blog posts from Hashnode via `BlogPosts` internally, then renders them in a two-column Rich table with post title and URL.
+
+No parameters. No return value.
+
+```python
+from rafnixg import RafnixG
+
+card = RafnixG()
+card.posts()
+```
+
+---
+
+### `get_links()`
+
+Fetches personal profile links via `Links` internally and renders them in a two-column Rich table with link name and URL.
+
+No parameters. No return value.
+
+```python
+from rafnixg import RafnixG
+
+card = RafnixG()
+card.get_links()
+```
+
+---
+
+### `_posts()`
+
+Internal helper method. Instantiates `BlogPosts` and returns its list of `BlogPost` objects. Called by `posts()` to retrieve post data before rendering.
+
+**Returns:** `list[BlogPost]`
+
+<Note>
+  This method is intended for internal use. Prefer `posts()` to render posts in the console, or import `BlogPosts` directly if you need programmatic access to post data.
+</Note>
+
+---
+
+## Full usage example
+
+```python
+from rafnixg import RafnixG
+
+card = RafnixG()
+
+# Print the personal card table
+card.display()
+
+# Print latest blog posts
+card.posts()
+
+# Print profile links
+card.get_links()
+
+# Access attributes directly
+print(card.name)       # Rafnix Guzmán
+print(card.github)     # https://github.com/rafnixg
+print(card.position)   # Python Backend | AI Engineer | Odoo Developer
+
+# Use the internal method to work with BlogPost objects
+posts = card._posts()
+for post in posts:
+    print(post.title, post.link)
+```

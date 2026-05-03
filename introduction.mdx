@@ -1,0 +1,68 @@
+---
+title: "What is rafnixg — Python developer profile library"
+description: "rafnixg is a PyPI library that displays personal cards, blog posts, and resume data in the terminal using Rich console styling. Requires Python 3.9+."
+---
+
+The `rafnixg` library is a Python package that lets you render a styled developer profile card, fetch the latest blog posts from Hashnode, and retrieve structured resume data — all from the terminal or your own Python scripts. Built on top of the [Rich](https://github.com/Textualize/rich) library, it produces clean, formatted console output with no configuration required.
+
+## What it does
+
+`rafnixg` bundles three areas of functionality into a single installable package. You can run it as a standalone CLI command or import individual classes into your own code. The library is designed for Python developers who want to present their profile, writing, and work history in a programmatic, terminal-friendly way.
+
+<CardGroup cols={2}>
+  <Card title="Personal card" icon="id-card" href="/api/personal-card">
+    Display your name, position, links, and social handles in a styled Rich table with a single method call.
+  </Card>
+  <Card title="Blog posts" icon="newspaper" href="/api/blog-posts">
+    Fetch and display your latest posts from Hashnode using the Hashnode GraphQL API.
+  </Card>
+  <Card title="Resume data" icon="file-lines" href="/api/resume">
+    Retrieve structured resume data from a hosted JSON Resume file, including work history, education, and skills.
+  </Card>
+  <Card title="Custom links" icon="link" href="/api/links">
+    Manage and display a curated list of personal links alongside your profile card.
+  </Card>
+</CardGroup>
+
+## Key features
+
+- **Zero configuration CLI** — run `rafnixg` after installing and get a fully formatted profile card immediately.
+- **Rich console styling** — tables, colors, and highlights are handled by the [Rich](https://github.com/Textualize/rich) library.
+- **Hashnode integration** — blog posts are fetched live via the Hashnode GraphQL API using the [requests](https://docs.python-requests.org/) library.
+- **JSON Resume support** — the `Resume` class retrieves resume data from a hosted JSON file covering basics, work, education, skills, languages, and references.
+- **Clean Python API** — all three modules (`RafnixG`, `BlogPosts`, `Resume`) are importable and usable independently in your own scripts.
+- **MIT licensed** — free to use, fork, and modify.
+
+## The three main modules
+
+### RafnixG — personal card
+
+The `RafnixG` class holds your profile attributes (name, position, website, GitHub, Twitter, and a short bio) and renders them as a Rich table. It also delegates to `BlogPosts` and `Links` to display posts and links in the same session.
+
+### BlogPosts — Hashnode integration
+
+The `BlogPosts` class queries the Hashnode GraphQL API and returns a list of `BlogPost` objects, each with a `title`, `link`, and publication metadata. You can iterate over posts or display them directly in the terminal.
+
+### Resume — JSON Resume
+
+The `Resume` class fetches a hosted JSON Resume file and deserializes it into typed Python objects: `Basics`, `Work`, `Education`, `Skill`, `Language`, `Certificate`, `Award`, `Project`, and `Reference`. This gives you structured access to every section of a standard resume.
+
+## Requirements
+
+- Python 3.9 or higher
+- Dependencies installed automatically: `rich`, `requests`
+
+## Get started
+
+<CardGroup cols={2}>
+  <Card title="Install rafnixg" icon="box" href="/installation">
+    Install the package from PyPI using pip.
+  </Card>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Run the CLI or use the Python API in under 5 minutes.
+  </Card>
+</CardGroup>
+
+## License
+
+`rafnixg` is released under the [MIT License](https://github.com/rafnixg/rafnixg-lib/blob/main/LICENSE).

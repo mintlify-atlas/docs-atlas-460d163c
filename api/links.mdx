@@ -1,0 +1,90 @@
+---
+title: "Links class — personal profile links manager reference"
+description: "Reference for the Links class, which manages and displays a list of personal profile links. Each link has a name and URL string field."
+---
+
+The `Links` class manages a list of personal profile links. On instantiation it calls `get_links()` and stores the result in the `links` attribute, making the links immediately available without any further method calls. Each link is represented as a plain dictionary with `"name"` and `"url"` string keys.
+
+<Note>
+  `Links` is not exported from the top-level `rafnixg` package. It is used internally by `RafnixG.get_links()`. If you need to access it directly, import from the submodule: `from rafnixg.links import Links`.
+</Note>
+
+## `Links` class
+
+### Constructor
+
+No arguments required. Links are fetched and stored automatically.
+
+```python
+from rafnixg.links import Links
+
+lnks = Links()
+print(lnks.links)
+```
+
+### `get_links()`
+
+Returns the list of personal profile links. Called automatically by the constructor and the result stored in `self.links`.
+
+**Returns:** `list[dict]` — each dict has `"name"` and `"url"` string keys.
+
+<Note>
+  In the current version, `get_links()` returns a hardcoded list containing only the GitHub profile link. Future versions may fetch links dynamically from a remote source.
+</Note>
+
+---
+
+## Link object shape
+
+Each item in the list returned by `get_links()` is a dictionary with the following fields:
+
+<ResponseField name="name" type="str">
+  Display name for the link (e.g. `"Git"`).
+</ResponseField>
+
+<ResponseField name="url" type="str">
+  The full URL for the link (e.g. `"https://github.com/rafnixg"`).
+</ResponseField>
+
+---
+
+## Default links
+
+By default, `Links` returns a single entry pointing to the GitHub profile:
+
+```json
+[
+  {
+    "name": "Git",
+    "url": "https://github.com/rafnixg"
+  }
+]
+```
+
+---
+
+## Usage example
+
+```python
+from rafnixg.links import Links
+
+lnks = Links()
+
+# Iterate over all links
+for link in lnks.links:
+    print(f"{link['name']}: {link['url']}")
+
+# Access a specific link by name
+github = next((l for l in lnks.links if l["name"] == "Git"), None)
+if github:
+    print(github["url"])  # https://github.com/rafnixg
+```
+
+You can also access links indirectly through the `RafnixG` class, which instantiates `Links` internally when `get_links()` is called:
+
+```python
+from rafnixg import RafnixG
+
+card = RafnixG()
+card.get_links()  # renders links as a Rich table in the console
+```

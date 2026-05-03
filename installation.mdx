@@ -1,0 +1,81 @@
+---
+title: "Install rafnixg from PyPI: requirements and setup guide"
+description: "Install the rafnixg Python library using pip. Requires Python 3.9 or higher. Includes Rich for console styling and requests for HTTP calls."
+---
+
+`rafnixg` is published on [PyPI](https://pypi.org/project/rafnixg/) and installs in a single command. It has two runtime dependencies — `rich` for console output and `requests` for HTTP calls — both of which are installed automatically.
+
+## Requirements
+
+- Python 3.9 or higher
+- `pip` (included with Python)
+
+<Note>
+  Check your Python version by running `python --version` or `python3 --version`. You need **Python 3.9 or higher** to use this library.
+</Note>
+
+## Install the package
+
+<Steps>
+  <Step title="Install from PyPI">
+    Run the following command to install the latest version of `rafnixg`:
+
+    ```bash
+    pip install rafnixg
+    ```
+
+    This installs the package and its two runtime dependencies automatically:
+
+    - **`rich`** — handles all terminal output, including styled tables and colored text.
+    - **`requests`** — makes HTTP calls to the Hashnode GraphQL API and the hosted JSON Resume file.
+  </Step>
+
+  <Step title="Verify the installation">
+    Confirm that the package installed correctly by checking the version:
+
+    ```bash
+    python -c "import rafnixg; print(rafnixg.__version__)"
+    ```
+
+    You should see the current version number printed to the terminal (for example, `1.8.0`).
+  </Step>
+
+  <Step title="Run the CLI command">
+    After installation, the `rafnixg` command is available on your PATH. Run it to confirm everything works:
+
+    ```bash
+    rafnixg
+    ```
+
+    This displays your personal card, curated links, and latest blog posts in the terminal.
+  </Step>
+</Steps>
+
+## Install development dependencies
+
+If you want to contribute to `rafnixg` or run the test suite locally, install the optional `dev` extras:
+
+```bash
+pip install rafnixg[dev]
+```
+
+This adds the following tools:
+
+| Package    | Purpose                              |
+| ---------- | ------------------------------------ |
+| `pytest`   | Run the test suite                   |
+| `black`    | Code formatting                      |
+| `isort`    | Import sorting                       |
+| `bumpver`  | Version bumping                      |
+| `pip-tools`| Dependency management                |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Display your personal card and use the Python API in under 5 minutes.
+  </Card>
+  <Card title="API reference" icon="code" href="/api/personal-card">
+    Explore every class and method available in the library.
+  </Card>
+</CardGroup>

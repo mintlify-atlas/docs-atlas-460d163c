@@ -1,0 +1,152 @@
+---
+title: "BlogPosts and BlogPost classes — blog API reference"
+description: "Reference for BlogPosts and BlogPost classes. Fetch and iterate Hashnode blog posts with title, summary, link, published date, and tags."
+---
+
+The `BlogPosts` and `BlogPost` classes provide a structured interface for fetching and working with blog posts from Hashnode. `BlogPosts` handles fetching via the Hashnode GraphQL API on instantiation and exposes the results as a list of typed `BlogPost` objects. `BlogPost` is a lightweight data model that carries each post's metadata and can be serialized to a dictionary.
+
+## `BlogPosts` class
+
+### Constructor
+
+Instantiating `BlogPosts` automatically fetches posts from the Hashnode API. The result is stored in the `posts` attribute as a `list[BlogPost]`.
+
+```python
+from rafnixg import BlogPosts
+
+bp = BlogPosts()
+print(bp.posts)  # list[BlogPost]
+```
+
+### `get_posts()`
+
+Fetches posts from the Hashnode GraphQL API via `hashnode_posts()` and converts each result into a `BlogPost` instance. Called automatically by the constructor.
+
+**Returns:** `list[BlogPost]` — an empty list if the API request fails.
+
+```python
+from rafnixg import BlogPosts
+
+bp = BlogPosts()
+posts = bp.get_posts()
+
+for post in posts:
+    print(post.title)
+```
+
+---
+
+### `save_to_json()`
+
+Serializes all fetched posts and writes them to a file named `posts.json` in the current working directory. Uses `json.dump` with 4-space indentation.
+
+No parameters. No return value.
+
+<Warning>
+  This method calls `self.posts.to_dict()`, which works correctly only when `self.posts` is a single `BlogPost` object. If you have a list of posts, iterate and call `to_dict()` on each item individually.
+</Warning>
+
+```python
+from rafnixg import BlogPosts
+
+bp = BlogPosts()
+bp.save_to_json()  # writes posts.json to the current directory
+```
+
+---
+
+## `BlogPost` data model
+
+`BlogPost` is a plain data class that holds metadata for a single blog post.
+
+### Constructor
+
+```python
+BlogPost(
+    title: str,
+    summay: str,   # note: parameter name has a typo in source
+    link: str,
+    published: str,
+    cover_image: str,
+    tags: list,
+)
+```
+
+<Note>
+  The constructor parameter is spelled `summay` (missing the final `r`) due to a typo in the source code. The resulting instance attribute is named `summary` — the assignment `self.summary = summay` corrects the name on the object. Always access the attribute as `post.summary`.
+</Note>
+
+### Attributes
+
+<ResponseField name="title" type="str" required>
+  The title of the blog post.
+</ResponseField>
+
+<ResponseField name="summary" type="str" required>
+  A brief summary or excerpt of the post content. Sourced from Hashnode's `brief` field.
+</ResponseField>
+
+<ResponseField name="link" type="str" required>
+  The canonical URL of the blog post.
+</ResponseField>
+
+<ResponseField name="published" type="str" required>
+  ISO 8601 date-time string representing when the post was published (e.g. `"2024-03-15T12:00:00.000Z"`).
+</ResponseField>
+
+<ResponseField name="cover_image" type="str" required>
+  URL of the post's cover image.
+</ResponseField>
+
+<ResponseField name="tags" type="list[dict]" required>
+  List of tag dictionaries. Each dict has a single `"name"` key containing the tag label.
+
+  <Expandable title="tag object properties">
+    <ResponseField name="name" type="str">
+      The display name of the tag.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+---
+
+### `to_dict()`
+
+Serializes the `BlogPost` instance to a plain dictionary using `self.__dict__`.
+
+**Returns:** `dict`
+
+```python
+from rafnixg import BlogPosts
+
+bp = BlogPosts()
+
+for post in bp.posts:
+    data = post.to_dict()
+    print(data["title"], data["link"])
+```
+
+---
+
+## Full usage example
+
+```python
+from rafnixg import BlogPosts
+
+# Fetch posts on instantiation
+bp = BlogPosts()
+
+# Iterate over BlogPost objects
+for post in bp.posts:
+    print(f"Title:     {post.title}")
+    print(f"Summary:   {post.summary}")
+    print(f"Link:      {post.link}")
+    print(f"Published: {post.published}")
+    print(f"Cover:     {post.cover_image}")
+    print(f"Tags:      {[t['name'] for t in post.tags]}")
+    print("-" * 40)
+
+# Serialize a single post
+first = bp.posts[0]
+print(first.to_dict())
+```

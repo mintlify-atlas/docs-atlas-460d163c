@@ -1,0 +1,48 @@
+{
+  "projectType": "sdk-library",
+  "projectName": "rafnixg",
+  "projectDescription": "A Python library providing a personal card, blog post manager, and resume tools for displaying developer profiles in the console.",
+  "theme": "palm",
+  "primaryColor": "#e0c155",
+  "lightColor": "#4a6a83",
+  "darkColor": "#d5d6d3",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Get Started",
+        "pages": ["introduction", "installation", "quickstart"]
+      },
+      {
+        "group": "API Reference",
+        "pages": [
+          "api/personal-card",
+          "api/blog-posts",
+          "api/resume",
+          "api/links",
+          "api/hashnode"
+        ]
+      },
+      {
+        "group": "Development",
+        "pages": ["development/contributing", "development/changelog"]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Personal card display in a styled Rich console table",
+    "Blog post fetching from Hashnode GraphQL API",
+    "Resume data retrieval from JSON Resume format",
+    "Customizable personal links manager",
+    "CLI command `rafnixg` for instant personal card display",
+    "Python 3.9+ compatible, published on PyPI"
+  ],
+  "publicApiSurface": [
+    "RafnixG — personal card class with display(), posts(), and get_links() methods",
+    "BlogPosts — fetches Hashnode blog posts via get_posts()",
+    "BlogPost — data model with title, summary, link, published, cover_image, tags",
+    "Resume — retrieves JSON Resume data with get_resume(), get_basics(), get_work(), get_education(), etc.",
+    "Basics, Work, Education, Certificate, Award, Project, Skill, Language, Reference — resume data models",
+    "Links — personal links manager with get_links()",
+    "hashnode_posts() — low-level Hashnode GraphQL API function"
+  ]
+}

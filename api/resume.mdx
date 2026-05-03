@@ -1,0 +1,368 @@
+---
+title: "Resume class and JSON Resume data models reference"
+description: "Reference for the Resume class and all data models: Basics, Work, Education, Certificate, Award, Project, Skill, Language, and Reference."
+---
+
+The `Resume` class fetches and parses a [JSON Resume](https://jsonresume.org/)-formatted document from `https://resume.rafnixg.dev/resume.json`. On instantiation it makes an HTTP GET request, then parses every section of the response into typed data model objects — `Basics`, `Work`, `Education`, `Certificate`, `Award`, `Skill`, `Language`, `Reference`, and `Project`. All sections are available as instance attributes immediately after construction.
+
+## `Resume` class
+
+### Constructor
+
+No arguments required. The constructor fetches the remote JSON and populates all section attributes automatically.
+
+```python
+from rafnixg import Resume
+
+resume = Resume()
+print(resume.basics.name)
+```
+
+### Attributes
+
+After construction the following attributes are available:
+
+| Attribute      | Type                  | Description                        |
+| -------------- | --------------------- | ---------------------------------- |
+| `json_path`    | `str`                 | URL of the remote JSON Resume file |
+| `raw_data`     | `dict`                | Parsed JSON response               |
+| `basics`       | `Basics`              | Personal and contact information   |
+| `work`         | `list[Work]`          | Work experience entries            |
+| `education`    | `list[Education]`     | Education entries                  |
+| `certificates` | `list[Certificate]`   | Certification entries              |
+| `awards`       | `list[Award]`         | Award entries                      |
+| `skills`       | `list[Skill]`         | Skill entries                      |
+| `languages`    | `list[Language]`      | Language proficiency entries       |
+| `references`   | `list[Reference]`     | Professional references            |
+| `projects`     | `list[Project]`       | Project entries                    |
+
+---
+
+### `read_json()`
+
+Fetches the JSON Resume document from `self.json_path` using an HTTP GET request. Raises `ValueError` if the response status is not 200.
+
+**Returns:** `dict` — the parsed JSON body.
+
+---
+
+### `get_resume()`
+
+Returns a dictionary containing all parsed sections keyed by section name.
+
+**Returns:** `dict` with keys `basics`, `work`, `education`, `certificates`, `awards`, `skills`, `languages`, `references`, `projects`.
+
+```python
+from rafnixg import Resume
+
+resume = Resume()
+data = resume.get_resume()
+print(data["basics"].name)
+```
+
+---
+
+### Section getter methods
+
+Each method parses the corresponding section from `raw_data` into a list (or single object for `get_basics()`) of typed data model instances. These are called automatically by the constructor.
+
+| Method                | Returns               |
+| --------------------- | --------------------- |
+| `get_basics()`        | `Basics`              |
+| `get_work()`          | `list[Work]`          |
+| `get_education()`     | `list[Education]`     |
+| `get_certificates()`  | `list[Certificate]`   |
+| `get_awards()`        | `list[Award]`         |
+| `get_skills()`        | `list[Skill]`         |
+| `get_languages()`     | `list[Language]`      |
+| `get_references()`    | `list[Reference]`     |
+| `get_projects()`      | `list[Project]`       |
+
+---
+
+### `to_dict()`
+
+Serializes the `Resume` instance to a dictionary using `self.__dict__`. Note that nested data model objects are not recursively serialized — they remain as Python objects.
+
+**Returns:** `dict`
+
+---
+
+## Data models
+
+### `Basics`
+
+Personal and contact details.
+
+<Expandable title="Basics attributes">
+  <ResponseField name="name" type="str">
+    Full name.
+  </ResponseField>
+  <ResponseField name="label" type="str">
+    Professional title or label.
+  </ResponseField>
+  <ResponseField name="image" type="str">
+    URL to profile image.
+  </ResponseField>
+  <ResponseField name="email" type="str">
+    Contact email address.
+  </ResponseField>
+  <ResponseField name="url" type="str">
+    Personal website URL.
+  </ResponseField>
+  <ResponseField name="summary" type="str">
+    Short professional bio.
+  </ResponseField>
+  <ResponseField name="location" type="dict">
+    Location data. Passes through raw JSON dict from the resume source.
+  </ResponseField>
+  <ResponseField name="profiles" type="list">
+    List of social network profile objects from the resume source.
+  </ResponseField>
+</Expandable>
+
+---
+
+### `Work`
+
+A single work experience entry.
+
+<Expandable title="Work attributes">
+  <ResponseField name="company" type="str">
+    Company or organization name. Mapped from `name` in JSON Resume.
+  </ResponseField>
+  <ResponseField name="position" type="str">
+    Job title held at the company.
+  </ResponseField>
+  <ResponseField name="website" type="str">
+    Company website URL. Mapped from `url` in JSON Resume.
+  </ResponseField>
+  <ResponseField name="start_date" type="str">
+    Employment start date (ISO date string). Mapped from `startDate`.
+  </ResponseField>
+  <ResponseField name="end_date" type="str">
+    Employment end date (ISO date string), or empty string if current. Mapped from `endDate`.
+  </ResponseField>
+  <ResponseField name="summary" type="str">
+    Brief description of the role.
+  </ResponseField>
+  <ResponseField name="highlights" type="list[str]">
+    List of notable achievements or responsibilities.
+  </ResponseField>
+  <ResponseField name="location" type="str">
+    Work location.
+  </ResponseField>
+</Expandable>
+
+---
+
+### `Education`
+
+A single education entry.
+
+<Expandable title="Education attributes">
+  <ResponseField name="institution" type="str">
+    Name of the educational institution.
+  </ResponseField>
+  <ResponseField name="area" type="str">
+    Field of study.
+  </ResponseField>
+  <ResponseField name="study_type" type="str">
+    Degree type (e.g. `"Bachelor"`, `"Master"`). Mapped from `studyType`.
+  </ResponseField>
+  <ResponseField name="start_date" type="str">
+    Study start date. Mapped from `startDate`.
+  </ResponseField>
+  <ResponseField name="end_date" type="str">
+    Study end date. Mapped from `endDate`.
+  </ResponseField>
+</Expandable>
+
+---
+
+### `Certificate`
+
+A professional certification entry.
+
+<Expandable title="Certificate attributes">
+  <ResponseField name="title" type="str">
+    Certification name. Mapped from `name` in JSON Resume.
+  </ResponseField>
+  <ResponseField name="date" type="str">
+    Date the certificate was awarded (ISO date string).
+  </ResponseField>
+  <ResponseField name="awarder" type="str">
+    Issuing organization. Mapped from `issuer` in JSON Resume.
+  </ResponseField>
+  <ResponseField name="url" type="str">
+    URL to the certification page or credential.
+  </ResponseField>
+</Expandable>
+
+---
+
+### `Award`
+
+A professional award or recognition.
+
+<Expandable title="Award attributes">
+  <ResponseField name="title" type="str">
+    Award name.
+  </ResponseField>
+  <ResponseField name="date" type="str">
+    Date the award was received (ISO date string).
+  </ResponseField>
+  <ResponseField name="awarder" type="str">
+    Organization that granted the award.
+  </ResponseField>
+  <ResponseField name="summary" type="str">
+    Description of the award.
+  </ResponseField>
+</Expandable>
+
+---
+
+### `Project`
+
+A project entry.
+
+<Expandable title="Project attributes">
+  <ResponseField name="name" type="str">
+    Project name.
+  </ResponseField>
+  <ResponseField name="description" type="str">
+    Short description of the project.
+  </ResponseField>
+  <ResponseField name="highlights" type="list[str]">
+    Notable achievements or features of the project.
+  </ResponseField>
+  <ResponseField name="keywords" type="list[str]">
+    Technologies or topics associated with the project.
+  </ResponseField>
+  <ResponseField name="start_date" type="str">
+    Project start date. Mapped from `startDate`.
+  </ResponseField>
+  <ResponseField name="url" type="str">
+    URL to the project (repository, demo, etc.).
+  </ResponseField>
+  <ResponseField name="roles" type="list[str]">
+    Roles played in the project.
+  </ResponseField>
+  <ResponseField name="entity" type="str">
+    Organization or entity the project was associated with.
+  </ResponseField>
+  <ResponseField name="project_type" type="str">
+    Project category or type. Mapped from `type` in JSON Resume.
+  </ResponseField>
+</Expandable>
+
+---
+
+### `Skill`
+
+A technical or professional skill.
+
+<Expandable title="Skill attributes">
+  <ResponseField name="name" type="str">
+    Skill name (e.g. `"Python"`, `"FastAPI"`).
+  </ResponseField>
+  <ResponseField name="level" type="str">
+    Proficiency level (e.g. `"Master"`, `"Advanced"`).
+  </ResponseField>
+  <ResponseField name="keywords" type="list[str]">
+    Related subtopics or technologies.
+  </ResponseField>
+</Expandable>
+
+---
+
+### `Language`
+
+A spoken or written language entry.
+
+<Expandable title="Language attributes">
+  <ResponseField name="language" type="str">
+    Language name (e.g. `"Spanish"`, `"English"`).
+  </ResponseField>
+  <ResponseField name="fluency" type="str">
+    Fluency level (e.g. `"Native speaker"`, `"Professional working proficiency"`).
+  </ResponseField>
+</Expandable>
+
+---
+
+### `Reference`
+
+A professional reference.
+
+<Expandable title="Reference attributes">
+  <ResponseField name="name" type="str">
+    Name of the reference contact.
+  </ResponseField>
+  <ResponseField name="reference" type="str">
+    The reference text or testimonial.
+  </ResponseField>
+</Expandable>
+
+---
+
+### `Profile`
+
+A social network profile linked from `Basics.profiles`. Note that `get_basics()` passes the raw profile list from the JSON Resume source without wrapping them in `Profile` objects — `Profile` is available as a standalone importable class.
+
+<Expandable title="Profile attributes">
+  <ResponseField name="network" type="str">
+    Social network name (e.g. `"GitHub"`, `"LinkedIn"`, `"Twitter"`).
+  </ResponseField>
+  <ResponseField name="username" type="str">
+    Username or handle on the network.
+  </ResponseField>
+  <ResponseField name="url" type="str">
+    Full profile URL on the network.
+  </ResponseField>
+</Expandable>
+
+```python
+from rafnixg import Profile
+
+profile = Profile(network="GitHub", username="rafnixg", url="https://github.com/rafnixg")
+print(profile.network, profile.username)
+```
+
+---
+
+## Full usage example
+
+```python
+from rafnixg import Resume
+
+resume = Resume()
+
+# Access basics
+print(resume.basics.name)
+print(resume.basics.email)
+print(resume.basics.summary)
+
+# Iterate work history
+for job in resume.work:
+    print(f"{job.position} at {job.company} ({job.start_date} – {job.end_date})")
+
+# Iterate education
+for edu in resume.education:
+    print(f"{edu.study_type} in {edu.area} from {edu.institution}")
+
+# Iterate skills
+for skill in resume.skills:
+    print(f"{skill.name} ({skill.level}): {', '.join(skill.keywords)}")
+
+# Iterate languages
+for lang in resume.languages:
+    print(f"{lang.language}: {lang.fluency}")
+
+# Iterate certifications
+for cert in resume.certificates:
+    print(f"{cert.title} — {cert.awarder} ({cert.date})")
+
+# Get full resume as dict
+data = resume.get_resume()
+```

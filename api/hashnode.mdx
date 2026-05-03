@@ -1,0 +1,141 @@
+---
+title: "hashnode_posts() — low-level Hashnode GraphQL client"
+description: "Low-level function that queries the Hashnode GraphQL API for blog posts. Returns a list of post dicts with title, summary, link, published, and cover_image."
+---
+
+`hashnode_posts()` is the low-level function that queries the Hashnode GraphQL API and returns a list of post dictionaries for the `blog.rafnixg.dev` publication. It handles the HTTP request, parses the GraphQL response, and flattens each post node into a simple dict. Most users should use the `BlogPosts` class instead, which wraps this function and returns typed `BlogPost` objects with a cleaner interface.
+
+<Note>
+  For most use cases, prefer importing and using `BlogPosts` from `rafnixg`. It calls `hashnode_posts()` internally and provides typed `BlogPost` objects, iteration support, and JSON export. Use `hashnode_posts()` directly only when you need the raw dict response or are building a custom integration.
+</Note>
+
+## `hashnode_posts()`
+
+Sends a POST request to the Hashnode GraphQL endpoint at `https://gql.hashnode.com/` and returns the transformed post list.
+
+**Parameters:** None
+
+**Returns:** `list[dict]` — one dict per post. Returns `[]` if the HTTP response status is not 200.
+
+### Return value shape
+
+Each dictionary in the returned list has the following keys:
+
+<ResponseField name="title" type="str">
+  The title of the blog post.
+</ResponseField>
+
+<ResponseField name="summary" type="str">
+  A short excerpt or brief description of the post. Sourced from the `brief` field in the GraphQL response.
+</ResponseField>
+
+<ResponseField name="link" type="str">
+  The canonical URL of the published post.
+</ResponseField>
+
+<ResponseField name="published" type="str">
+  ISO 8601 date-time string for when the post was published. Sourced from `publishedAt`.
+</ResponseField>
+
+<ResponseField name="cover_image" type="str">
+  URL of the post's cover image. Sourced from `coverImage.url`.
+</ResponseField>
+
+---
+
+## GraphQL query
+
+The function sends the following query to `https://gql.hashnode.com/`:
+
+```graphql
+query Publication {
+  publication(host: "blog.rafnixg.dev") {
+    posts(first: 0) {
+      edges {
+        node {
+          slug
+          title
+          url
+          brief
+          publishedAt
+          coverImage {
+            url
+          }
+          content {
+            markdown
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+<Note>
+  `first: 0` is passed to the `posts` argument in the query. Depending on the Hashnode API version, this may return all posts or require adjustment to paginate results.
+</Note>
+
+---
+
+## Private helper functions
+
+These functions are used internally by `hashnode_posts()` and are not part of the public API. They are documented here for reference.
+
+### `_transform_posts(posts_data)`
+
+Transforms the raw GraphQL response into a list of post dicts by iterating over the `edges` array and calling `_transform_post()` on each node.
+
+**Parameters:**
+
+<ParamField path="posts_data" type="dict">
+  The full parsed JSON response from the Hashnode GraphQL API.
+</ParamField>
+
+**Returns:** `list[dict]`
+
+---
+
+### `_transform_post(post_data)`
+
+Transforms a single post node dict from the GraphQL `edges[].node` shape into the flat dict format returned by `hashnode_posts()`.
+
+**Parameters:**
+
+<ParamField path="post_data" type="dict">
+  A single post node from the GraphQL response containing `title`, `url`, `brief`, `publishedAt`, and `coverImage.url`.
+</ParamField>
+
+**Returns:** `dict` with keys `title`, `summary`, `link`, `published`, `cover_image`.
+
+---
+
+## Usage example
+
+```python
+from rafnixg import hashnode_posts  # top-level export
+# or equivalently:
+# from rafnixg.hashnode import hashnode_posts
+
+posts = hashnode_posts()
+
+if not posts:
+    print("Failed to fetch posts or no posts available.")
+else:
+    for post in posts:
+        print(f"Title:     {post['title']}")
+        print(f"Link:      {post['link']}")
+        print(f"Summary:   {post['summary']}")
+        print(f"Published: {post['published']}")
+        print(f"Cover:     {post['cover_image']}")
+        print("-" * 40)
+```
+
+For a higher-level interface that wraps this function with typed objects:
+
+```python
+from rafnixg import BlogPosts
+
+bp = BlogPosts()
+for post in bp.posts:
+    print(post.title, post.link)
+```

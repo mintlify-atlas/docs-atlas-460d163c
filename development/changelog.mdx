@@ -1,0 +1,63 @@
+---
+title: "rafnixg version history, release notes, and changelog"
+description: "Version history for the rafnixg library. Current version is 1.8.0. Published to PyPI with automated GitHub Actions deployment on every release."
+---
+
+The rafnixg library follows [semantic versioning](https://semver.org/) using the `MAJOR.MINOR.PATCH` scheme, as configured in `pyproject.toml` via the `bumpver` tool. Each release is tagged in git and automatically published to PyPI through GitHub Actions.
+
+<Note>
+  No `CHANGELOG.md` file exists in the repository. For a complete list of all past releases and their release notes, visit the [GitHub releases page](https://github.com/rafnixg/rafnixg-lib/releases).
+</Note>
+
+## Version 1.8.0 (current)
+
+This is the current stable release of the rafnixg library. It includes the following features:
+
+<CardGroup cols={2}>
+  <Card title="Personal card" icon="id-card" href="https://github.com/rafnixg/rafnixg-lib">
+    The `RafnixG` class renders a styled personal card in the terminal using the Rich console library, displaying name, position, and social profile links.
+  </Card>
+  <Card title="Blog posts" icon="rss" href="https://github.com/rafnixg/rafnixg-lib">
+    The `BlogPosts` class fetches and displays the latest blog posts from Hashnode via its GraphQL API, including title, summary, link, and publication date.
+  </Card>
+  <Card title="Resume tools" icon="file-text" href="https://github.com/rafnixg/rafnixg-lib">
+    The `Resume` class retrieves resume data in JSON Resume format from a remote source, covering basics, work experience, education, skills, languages, and references.
+  </Card>
+  <Card title="Links manager" icon="link" href="https://github.com/rafnixg/rafnixg-lib">
+    The `Links` class manages and displays personal links for use in the console card and other output contexts.
+  </Card>
+</CardGroup>
+
+### CLI command
+
+Version 1.8.0 ships the `rafnixg` CLI command, registered via `pyproject.toml` as the entry point for `rafnixg.__main__:main`. Run it directly after installation:
+
+```bash
+rafnixg
+```
+
+## Automated publishing
+
+Every new release is published to PyPI automatically via the `.github/workflows/python-publish.yml` GitHub Actions workflow. The workflow triggers on any published GitHub release, builds the package using `python -m build`, and uploads it to PyPI using the `pypa/gh-action-pypi-publish` action with a stored API token.
+
+You can install the latest published version at any time with:
+
+```bash
+pip install rafnixg
+```
+
+## Versioning policy
+
+The project uses `bumpver` to manage version numbers. Version strings follow the `MAJOR.MINOR.PATCH` pattern:
+
+| Segment | When to increment |
+|---|---|
+| `MAJOR` | Breaking changes to the public API |
+| `MINOR` | New features added in a backward-compatible manner |
+| `PATCH` | Backward-compatible bug fixes |
+
+When a version is bumped, `bumpver` automatically updates `pyproject.toml`, `src/rafnixg/__init__.py`, and `README.md`, then creates a git commit and tag. The tag triggers the GitHub Actions publish workflow.
+
+<Tip>
+  To check the installed version of the library, run `pip show rafnixg` or inspect `rafnixg.__version__` in a Python session.
+</Tip>

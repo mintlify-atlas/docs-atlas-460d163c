@@ -1,0 +1,116 @@
+---
+title: "Contribute to rafnixg: local dev setup, tests, and PRs"
+description: "Learn how to set up a local development environment, run tests, and submit pull requests to the rafnixg open-source library on GitHub."
+---
+
+Contributions to the rafnixg library are welcome. Whether you want to fix a bug, improve documentation, or add a new feature, this guide walks you through everything you need to get a local development environment running and submit your changes.
+
+## Prerequisites
+
+Before you begin, make sure you have the following installed:
+
+- **Python 3.9 or higher** — required by the library
+- **git** — to clone the repository and manage branches
+- **pip** — to install dependencies
+
+## Local setup
+
+<Steps>
+  <Step title="Clone the repository">
+    Clone the project from GitHub and navigate into the directory:
+
+    ```bash
+    git clone https://github.com/rafnixg/rafnixg-lib.git && cd rafnixg-lib
+    ```
+  </Step>
+
+  <Step title="Install dependencies">
+    Install the runtime dependencies from `requirements.txt`, then install the package in editable mode along with the development extras:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+    ```bash
+    pip install -e ".[dev]"
+    ```
+
+    The `[dev]` extras install the following tools: `black`, `bumpver`, `isort`, `pip-tools`, and `pytest`.
+
+    <Note>
+      Installing in editable mode (`-e`) means changes you make to the source code are immediately reflected without reinstalling the package.
+    </Note>
+  </Step>
+
+  <Step title="Run the main script">
+    Verify your setup by running the CLI entry point:
+
+    ```bash
+    python -m rafnixg
+    ```
+
+    This displays the personal card in your terminal using the Rich console renderer.
+  </Step>
+
+  <Step title="Run the test suite">
+    Run all tests using pytest:
+
+    ```bash
+    pytest
+    ```
+  </Step>
+</Steps>
+
+## Code style
+
+The project uses two tools to enforce consistent code style:
+
+- **black** — formats Python source code automatically. Run it before committing:
+
+  ```bash
+  black src/
+  ```
+
+- **isort** — sorts and organizes import statements:
+
+  ```bash
+  isort src/
+  ```
+
+<Note>
+  Both `black` and `isort` are included in the `[dev]` extras and will be available after running `pip install -e ".[dev]"`.
+</Note>
+
+## Project structure
+
+The main source code lives under `src/rafnixg/`. Here is an overview of the key files:
+
+| Path | Description |
+|---|---|
+| `src/rafnixg/` | Main source directory |
+| `rafnixg.py` | `RafnixG` personal card class |
+| `blog_posts.py` | `BlogPosts` and `BlogPost` classes |
+| `hashnode.py` | Hashnode GraphQL client |
+| `resume.py` | `Resume` and data model classes |
+| `links.py` | `Links` class |
+| `__main__.py` | CLI entry point |
+
+## Submitting changes
+
+To contribute a bug fix or new feature:
+
+1. Fork the repository on GitHub.
+2. Create a new branch for your change.
+3. Make your changes, following the code style guidelines above.
+4. Ensure all tests pass with `pytest`.
+5. Open a pull request against the `main` branch on [github.com/rafnixg/rafnixg-lib](https://github.com/rafnixg/rafnixg-lib).
+
+If you find a bug or have a feature request, you can also [open an issue](https://github.com/rafnixg/rafnixg-lib/issues) without submitting code.
+
+## CI and publishing
+
+The repository includes a GitHub Actions workflow at `.github/workflows/python-publish.yml`. When a new release is published on GitHub, this workflow automatically builds the package and publishes it to PyPI using a configured `PYPI_API_TOKEN` secret. You do not need to do anything manually to trigger a release — that is handled by the project maintainer.
+
+## License
+
+rafnixg is released under the [MIT License](https://github.com/rafnixg/rafnixg-lib/blob/main/LICENSE). By contributing, you agree that your contributions will be licensed under the same terms. Copyright (c) 2023 Rafnix Gabriel Guzmán García.

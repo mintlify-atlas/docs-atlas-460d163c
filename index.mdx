@@ -1,133 +1,61 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
-icon: 'star'
+title: "rafnixg: Python personal card and developer profile library"
+description: "rafnixg is a Python library for displaying personal cards, blog posts, and resume data in the console. Install with pip and run in seconds."
 ---
 
-## Setting up
+The `rafnixg` library lets you display a styled developer personal card, fetch the latest blog posts from Hashnode, and retrieve structured resume data — all from a single Python package. Whether you're using it as a CLI tool or integrating it into your own scripts, it provides a clean API built on top of the [Rich](https://github.com/Textualize/rich) library.
 
-Get your documentation site up and running in minutes.
-
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Installation" icon="box" href="/installation">
+    Install the package from PyPI and set up your environment
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Get your personal card displayed in the terminal in under a minute
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="API Reference" icon="code" href="/api/personal-card">
+    Explore every class and method available in the library
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Contributing" icon="code-branch" href="/development/contributing">
+    Learn how to contribute and develop the project locally
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## What's included
 
-Everything you need to create world-class documentation.
+The library exposes three main areas of functionality:
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
+<CardGroup cols={3}>
+  <Card title="Personal Card" icon="id-card" href="/api/personal-card">
+    Display your name, position, links, and social handles in a styled Rich table
   </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
+  <Card title="Blog Posts" icon="newspaper" href="/api/blog-posts">
+    Fetch and display your latest posts from Hashnode via GraphQL
   </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
+  <Card title="Resume" icon="file-lines" href="/api/resume">
+    Retrieve structured resume data including work, education, and skills
   </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+</CardGroup>
 
-## Make your content agent ready
+## Get started in 3 steps
 
-Make your docs work for humans and AI agents alike.
+<Steps>
+  <Step title="Install the package">
+    ```bash
+    pip install rafnixg
+    ```
+  </Step>
+  <Step title="Run the CLI">
+    ```bash
+    rafnixg
+    ```
+    This displays your personal card, links, and latest blog posts directly in the terminal.
+  </Step>
+  <Step title="Use the Python API">
+    ```python
+    from rafnixg import RafnixG, BlogPosts, Resume
 
-<Columns cols={2}>
-  <Card
-    title="Prompt component"
-    icon="robot"
-    href="/agent-ready/prompt"
-  >
-    Embed shareable AI prompts readers can copy or open in Cursor.
-  </Card>
-  <Card
-    title="Visibility"
-    icon="eye"
-    href="/agent-ready/visibility"
-  >
-    Show different content to humans and agents reading your docs.
-  </Card>
-  <Card
-    title="Contextual menu"
-    icon="bolt"
-    href="/agent-ready/contextual"
-  >
-    Give readers one-click access to Claude, ChatGPT, Cursor, and more.
-  </Card>
-  <Card
-    title="AI coding tools"
-    icon="wand-magic-sparkles"
-    href="/ai-tools/claude-code"
-  >
-    Set up Claude Code, Cursor, or Windsurf with Mintlify's skill.
-  </Card>
-</Columns>
-
-## Need inspiration?
-
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+    me = RafnixG()
+    me.display()
+    ```
+  </Step>
+</Steps>
